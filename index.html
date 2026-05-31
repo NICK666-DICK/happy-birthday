@@ -66,7 +66,7 @@ h1{font-size:2.5em;margin-bottom:20px;}
   <!-- 后面再加照片 -->
 </div>
 
-<!-- 修复后的音频标签（有闭合、链接有效） -->
+<!-- 🔊 修复：有效尖叫链接 + 闭合标签 -->
 <audio id="alert-sound" preload="auto">
   <source src="https://cdn.pixabay.com/audio/2021/08/30/audio_2d7d587ebf.mp3" type="audio/mpeg">
 
@@ -76,22 +76,25 @@ let bar=document.getElementById('bar');
 let width=0;
 let timer=null;
 let started=false;
+let sound=document.getElementById('alert-sound');
 
-// 用户点击页面解锁声音
+// 用户点击解锁声音（必须）
 document.body.addEventListener('click', () => {
   if (started) return;
   started=true;
-  // 预播放一次解锁
-  document.getElementById('alert-sound').play().catch(e=>{});
-  // 开始进度条
+
+  // 先“唤醒”音频（关键！）
+  sound.play().then(()=>{ sound.pause(); sound.currentTime=0; });
+
+  // 进度条开始
   timer=setInterval(function(){
     width+=1;
     bar.style.width=width+"%";
     if(width>=100){
       clearInterval(timer);
-      // 进度条跑完：从头播放音频
-      document.getElementById('alert-sound').currentTime=0;
-      document.getElementById('alert-sound').play().catch(e=>{});
+      // 进度条跑完：尖叫 + 图片 + 震动
+      sound.currentTime=0;
+      sound.play();
       document.getElementById('scary-image').style.display='flex';
       document.body.classList.add('shake');
       setTimeout(()=>{
