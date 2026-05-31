@@ -1,240 +1,98 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows 安全中心</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0078d7;
-            color: white;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .windows-alert {
-            background-color: white;
-            color: black;
-            width: 500px;
-            border-radius: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .alert-header {
-            background-color: #0078d7;
-            color: white;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        .alert-icon {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .alert-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .alert-body {
-            padding: 25px;
-            display: flex;
-        }
-
-        .warning-icon {
-            font-size: 64px;
-            color: #ffc107;
-            margin-right: 20px;
-        }
-
-        .alert-content {
-            flex: 1;
-        }
-
-        .alert-message {
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: #0078d7;
-            width: 0%;
-            transition: width 0.5s;
-        }
-
-        .alert-footer {
-            padding: 15px 25px;
-            background-color: #f5f5f5;
-            text-align: right;
-        }
-
-        .btn {
-            padding: 8px 20px;
-            margin-left: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: white;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background-color: #0078d7;
-            color: white;
-            border-color: #0078d7;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        .shake {
-            animation: shake 0.5s infinite;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生日快乐</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  height:100vh;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+  font-family:"Microsoft YaHei",sans-serif;
+  overflow:hidden;
+}
+.container{text-align:center;}
+h1{font-size:2.5em;margin-bottom:20px;}
+.progress{
+  width:300px;height:20px;
+  border:2px solid #fff;
+  border-radius:10px;
+  margin:0 auto;
+  overflow:hidden;
+}
+.bar{
+  width:0;height:100%;
+  background:#f00;
+}
+/* 整蛊图片默认隐藏 */
+.scary-image{
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  background:#000;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+.scary-image img{
+  max-width:100%;
+  max-height:100%;
+}
+/* 震动效果 */
+.shake{
+  animation:shake 0.1s infinite;
+}
+@keyframes shake{
+  0%{transform:translate(2px,2px);}
+  50%{transform:translate(-2px,-2px);}
+  100%{transform:translate(2px,2px);}
+}
+</style>
 </head>
 <body>
-    <div class="windows-alert">
-        <div class="alert-header">
-            <div class="alert-icon">🛡️</div>
-            <div class="alert-title">Windows 安全中心 - 病毒威胁检测</div>
-        </div>
-        <div class="alert-body">
-            <div class="warning-icon">⚠️</div>
-            <div class="alert-content">
-                <div class="alert-message">
-                    <strong>检测到高危病毒：Trojan.Win32.Destroyer</strong><br><br>
-                    该病毒正在删除您的系统文件和个人数据。<br>
-                    病毒已感染：C:\Windows\System32<br>
-                    受影响文件：1,247 个<br><br>
-                    正在尝试隔离病毒...
-                </div>
-                <div class="progress-bar">
-                    <div class="progress" id="progress"></div>
-                </div>
-                <div id="status">进度：0%</div>
-            </div>
-        </div>
-        <div class="alert-footer">
-            <button class="btn btn-primary" id="cancel-btn">取消隔离</button>
-            <button class="btn" id="ok-btn">确定</button>
-        </div>
-    </div>
+<div class="container">
+  <h1>生日快乐 🎂</h1>
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+  <p style="margin-top:20px;">加载中...</p>
+</div>
+
+<!-- 整蛊图片（现在先空着，后面再加照片） -->
+<div class="scary-image" id="scary-image">
+  <!-- 以后你要加图，就把下面注释打开，换成你的图片名 -->
+  <!-- <img src="pic.jpg" alt=""> -->
+</div>
+
+<!-- 音频：已经帮你设为恐怖尖叫 -->
 <audio id="alert-sound" preload="auto">
   <source src="https://assets.mixkit.co/sfx/preview/mixkit-scary-scream-1207.mp3" type="audio/mpeg">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" type="audio/mpeg">
-    
 
-    <script>
-        let progress = 0;
-        const progressBar = document.getElementById('progress');
-        const statusText = document.getElementById('status');
-        const alertBox = document.querySelector('.windows-alert');
-        const audio = document.getElementById('alert-sound');
 
-        // 播放系统提示音
-        document.body.addEventListener('click', () => {
-            audio.play().catch(e => {});
-        }, { once: true });
-
-        // 模拟进度条
-        const interval = setInterval(() => {
-            progress += Math.random() * 3;
-            if (progress > 100) progress = 100;
-            
-            progressBar.style.width = progress + '%';
-            statusText.textContent = `进度：${Math.floor(progress)}%`;
-
-            // 进度超过70%时开始震动
-            if (progress > 70) {
-                alertBox.classList.add('shake');
-            }
-
-            if (progress >= 100) {
-                clearInterval(interval);
-                
-                // 改变内容为生日惊喜
-                document.querySelector('.alert-title').textContent = "生日快乐！";
-                document.querySelector('.warning-icon').textContent = "🎂";
-                document.querySelector('.alert-message').innerHTML = `
-                    <strong>恭喜你被整蛊了！</strong><br><br>
-                    你的电脑很安全，什么都没有发生。<br>
-                    这个页面只是一个生日惊喜而已。<br><br>
-                    祝你生日快乐，天天开心！
-                `;
-                statusText.textContent = "惊喜成功！";
-                alertBox.classList.remove('shake');
-                
-                // 按钮点击效果
-                document.getElementById('cancel-btn').textContent = "哈哈，谢谢";
-                document.getElementById('ok-btn').textContent = "太惊喜了";
-                
-                // 点击任意按钮弹出更多祝福窗口
-                document.querySelectorAll('.btn').forEach(btn => {
-                    btn.addEventListener('click', createPopup);
-                });
-            }
-        }, 200);
-
-        function createPopup() {
-            const messages = [
-                "生日快乐！🎂",
-                "天天开心！😊",
-                "心想事成！✨",
-                "万事如意！🎉",
-                "暴富暴美！💰",
-                "健康快乐！💪"
-            ];
-
-            const popup = document.createElement('div');
-            popup.style.cssText = `
-                position: fixed;
-                background: white;
-                padding: 20px;
-                border: 2px solid #0078d7;
-                border-radius: 6px;
-                z-index: 9999;
-                left: ${Math.random() * (window.innerWidth - 200)}px;
-                top: ${Math.random() * (window.innerHeight - 100)}px;
-            `;
-            popup.innerHTML = `
-                <p>${messages[Math.floor(Math.random() * messages.length)]}</p>
-                <button onclick="this.parentElement.remove(); createPopup(); createPopup();">关闭</button>
-            `;
-            document.body.appendChild(popup);
-        }
-
-        // 阻止关闭页面
-        window.addEventListener('beforeunload', (e) => {
-            e.preventDefault();
-            e.returnValue = '确定要离开吗？还有更多惊喜等着你！';
-            return e.returnValue;
-        });
-    </script>
+<script>
+let bar=document.getElementById('bar');
+let width=0;
+let timer=setInterval(function(){
+  width+=1;
+  bar.style.width=width+"%";
+  if(width>=100){
+    clearInterval(timer);
+    // 进度条走完：出声+震动+闪图
+    document.getElementById('alert-sound').play().catch(e=>{});
+    document.getElementById('scary-image').style.display='flex';
+    document.body.classList.add('shake');
+    setTimeout(()=>{
+      document.getElementById('scary-image').style.display='none';
+      document.body.classList.remove('shake');
+    },1000);
+  }
+},30);
+</script>
 </body>
 </html>
