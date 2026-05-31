@@ -66,7 +66,7 @@ h1{font-size:2.5em;margin-bottom:20px;}
   <!-- 后面再加照片 -->
 </div>
 
-<!-- 换一个稳定、可跨域的尖叫音效 -->
+<!-- 修复后的音频标签（有闭合、链接有效） -->
 <audio id="alert-sound" preload="auto">
   <source src="https://cdn.pixabay.com/audio/2021/08/30/audio_2d7d587ebf.mp3" type="audio/mpeg">
 
@@ -77,11 +77,11 @@ let width=0;
 let timer=null;
 let started=false;
 
-// 第一步：用户点一下页面，才开始
+// 用户点击页面解锁声音
 document.body.addEventListener('click', () => {
   if (started) return;
   started=true;
-  // 先“预播放一次”解锁声音
+  // 预播放一次解锁
   document.getElementById('alert-sound').play().catch(e=>{});
   // 开始进度条
   timer=setInterval(function(){
@@ -89,8 +89,8 @@ document.body.addEventListener('click', () => {
     bar.style.width=width+"%";
     if(width>=100){
       clearInterval(timer);
-      // 进度条跑完：出声+震动+闪图
-      document.getElementById('alert-sound').currentTime=0; // 从头播放
+      // 进度条跑完：从头播放音频
+      document.getElementById('alert-sound').currentTime=0;
       document.getElementById('alert-sound').play().catch(e=>{});
       document.getElementById('scary-image').style.display='flex';
       document.body.classList.add('shake');
