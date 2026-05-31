@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>生日快乐</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
   height:100vh;
   background:#000;
   display:flex;
@@ -14,42 +14,19 @@ body{
   align-items:center;
   color:#fff;
   font-family:"Microsoft YaHei",sans-serif;
-  overflow:hidden;
 }
-.container{text-align:center;}
-h1{font-size:2.5em;margin-bottom:20px;}
-.progress{
+.container {text-align:center;}
+h1 {font-size:2.5em;margin-bottom:20px;}
+.progress {
   width:300px;height:20px;
   border:2px solid #fff;
   border-radius:10px;
   margin:0 auto;
   overflow:hidden;
 }
-.bar{
+.bar {
   width:0;height:100%;
   background:#f00;
-}
-.scary-image{
-  position:fixed;
-  top:0;left:0;
-  width:100vw;height:100vh;
-  background:#000;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-}
-.scary-image img{
-  max-width:100%;
-  max-height:100%;
-}
-.shake{
-  animation:shake 0.1s infinite;
-}
-@keyframes shake{
-  0%{transform:translate(2px,2px);}
-  50%{transform:translate(-2px,-2px);}
-  100%{transform:translate(2px,2px);}
 }
 </style>
 </head>
@@ -62,47 +39,37 @@ h1{font-size:2.5em;margin-bottom:20px;}
   <p style="margin-top:20px;">点击页面任意处开始</p>
 </div>
 
-<div class="scary-image" id="scary-image">
-  <!-- 后面再加照片 -->
-</div>
-
-<!-- 🔊 修复：有效尖叫链接 + 闭合标签 -->
-<audio id="alert-sound" preload="auto">
-  <source src="https://cdn.pixabay.com/audio/2021/08/30/audio_2d7d587ebf.mp3" type="audio/mpeg">
-
+<!-- 只留声音，不用图片 -->
+<audio id="scream" preload="auto" src="https://cdn.pixabay.com/audio/2021/08/30/audio_2d7d587ebf.mp3">
 
 <script>
-let bar=document.getElementById('bar');
-let width=0;
-let timer=null;
-let started=false;
-let sound=document.getElementById('alert-sound');
+let bar = document.getElementById('bar');
+let width = 0;
+let timer = null;
+let started = false;
+let scream = document.getElementById('scream');
 
-// 用户点击解锁声音（必须）
 document.body.addEventListener('click', () => {
   if (started) return;
-  started=true;
+  started = true;
 
-  // 先“唤醒”音频（关键！）
-  sound.play().then(()=>{ sound.pause(); sound.currentTime=0; });
+  // 先唤醒音频（浏览器必须有这一步）
+  scream.play().then(() => {
+    scream.pause();
+    scream.currentTime = 0;
+  });
 
-  // 进度条开始
-  timer=setInterval(function(){
-    width+=1;
-    bar.style.width=width+"%";
-    if(width>=100){
+  // 进度条
+  timer = setInterval(() => {
+    width += 1;
+    bar.style.width = width + '%';
+    if (width >= 100) {
       clearInterval(timer);
-      // 进度条跑完：尖叫 + 图片 + 震动
-      sound.currentTime=0;
-      sound.play();
-      document.getElementById('scary-image').style.display='flex';
-      document.body.classList.add('shake');
-      setTimeout(()=>{
-        document.getElementById('scary-image').style.display='none';
-        document.body.classList.remove('shake');
-      },1000);
+      // 进度条满 → 尖叫
+      scream.currentTime = 0;
+      scream.play();
     }
-  },30);
+  }, 30);
 });
 </script>
 </body>
