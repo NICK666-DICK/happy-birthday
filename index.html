@@ -29,7 +29,6 @@ h1{font-size:2.5em;margin-bottom:20px;}
   width:0;height:100%;
   background:#f00;
 }
-/* 整蛊图片默认隐藏 */
 .scary-image{
   position:fixed;
   top:0;left:0;
@@ -44,7 +43,6 @@ h1{font-size:2.5em;margin-bottom:20px;}
   max-width:100%;
   max-height:100%;
 }
-/* 震动效果 */
 .shake{
   animation:shake 0.1s infinite;
 }
@@ -61,38 +59,48 @@ h1{font-size:2.5em;margin-bottom:20px;}
   <div class="progress">
     <div class="bar" id="bar"></div>
   </div>
-  <p style="margin-top:20px;">加载中...</p>
+  <p style="margin-top:20px;">点击页面任意处开始</p>
 </div>
 
-<!-- 整蛊图片（现在先空着，后面再加照片） -->
 <div class="scary-image" id="scary-image">
-  <!-- 以后你要加图，就把下面注释打开，换成你的图片名 -->
-  <!-- <img src="pic.jpg" alt=""> -->
+  <!-- 后面再加照片 -->
 </div>
 
-<!-- 音频：已经帮你设为恐怖尖叫 -->
+<!-- 换一个稳定、可跨域的尖叫音效 -->
 <audio id="alert-sound" preload="auto">
-  <source src="https://assets.mixkit.co/sfx/preview/mixkit-scary-scream-1207.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2021/08/30/audio_2d7d587ebf.mp3" type="audio/mpeg">
 
 
 <script>
 let bar=document.getElementById('bar');
 let width=0;
-let timer=setInterval(function(){
-  width+=1;
-  bar.style.width=width+"%";
-  if(width>=100){
-    clearInterval(timer);
-    // 进度条走完：出声+震动+闪图
-    document.getElementById('alert-sound').play().catch(e=>{});
-    document.getElementById('scary-image').style.display='flex';
-    document.body.classList.add('shake');
-    setTimeout(()=>{
-      document.getElementById('scary-image').style.display='none';
-      document.body.classList.remove('shake');
-    },1000);
-  }
-},30);
+let timer=null;
+let started=false;
+
+// 第一步：用户点一下页面，才开始
+document.body.addEventListener('click', () => {
+  if (started) return;
+  started=true;
+  // 先“预播放一次”解锁声音
+  document.getElementById('alert-sound').play().catch(e=>{});
+  // 开始进度条
+  timer=setInterval(function(){
+    width+=1;
+    bar.style.width=width+"%";
+    if(width>=100){
+      clearInterval(timer);
+      // 进度条跑完：出声+震动+闪图
+      document.getElementById('alert-sound').currentTime=0; // 从头播放
+      document.getElementById('alert-sound').play().catch(e=>{});
+      document.getElementById('scary-image').style.display='flex';
+      document.body.classList.add('shake');
+      setTimeout(()=>{
+        document.getElementById('scary-image').style.display='none';
+        document.body.classList.remove('shake');
+      },1000);
+    }
+  },30);
+});
 </script>
 </body>
 </html>
